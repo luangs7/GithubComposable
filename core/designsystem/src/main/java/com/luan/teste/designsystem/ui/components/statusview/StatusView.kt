@@ -1,4 +1,4 @@
-package com.luan.teste.designsystem.ui.components
+package com.luan.teste.designsystem.ui.components.statusview
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

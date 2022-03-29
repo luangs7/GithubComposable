@@ -1,4 +1,4 @@
-package com.luan.teste.presentation.profile
+package com.luan.teste.presentation.profile.details
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
@@ -13,42 +13,51 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.CachePolicy
+import coil.request.ImageRequest
 import com.luan.teste.common.base.ViewState
-import com.luan.teste.designsystem.ui.components.LoadingView
-import com.luan.teste.designsystem.ui.components.StatusView
+import com.luan.teste.designsystem.ui.components.loading.LoadingView
+import com.luan.teste.designsystem.ui.components.statusview.StatusView
 import com.luan.teste.designsystem.ui.theme.AppTheme
 import com.luan.teste.designsystem.ui.theme.descriptionStyle
 import com.luan.teste.designsystem.ui.theme.title
 import com.luan.teste.domain.model.profile.User
 import com.luan.teste.presentation.R
-import com.luan.teste.presentation.emoji.EmojiListContent
+import com.luan.teste.presentation.profile.ProfileViewModel
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun ProfileView(
-    viewModel: ProfileViewModel = getViewModel()
+    viewModel: ProfileViewModel = getViewModel(),
+    username: String
 ) {
-    val userState = viewModel.userResponse.collectAsState()
+    val userState = viewModel.userListResponse.collectAsState()
+    viewModel.getUsersByUsername(username)
 
     Crossfade(userState) { state ->
-        when(val value = state.value){
-            is ViewState.Empty -> StatusView(icon = R.drawable.box, text = "Não houve resultados para sua busca.")
-            is ViewState.Error -> StatusView(icon = R.drawable.bankrupt, text = "Ocorreu um erro ao processar sua solicitação. Tente novamente mais tarde.")
+        when (val value = state.value) {
+            is ViewState.Empty, is ViewState.Error -> StatusView(
+                icon = R.drawable.bankrupt,
+                text = stringResource(R.string.error_label)
+            )
             is ViewState.Loading -> LoadingView()
-            is ViewState.Success -> ProfileContentView(value.result)
+            is ViewState.Success -> ProfileContentView(value.result.first())
         }
     }
-
 }
 
 @Composable
 internal fun ProfileContentView(
     item: User
-){
+) {
     AppTheme {
         Column(
             modifier = Modifier
@@ -56,7 +65,7 @@ internal fun ProfileContentView(
                 .fillMaxHeight(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            ProfileHeader(item = item,modifier = Modifier.padding(16.dp))
+            ProfileHeader(item = item, modifier = Modifier.padding(16.dp))
             Divider(
                 color = Color.Gray.copy(alpha = 0.5f),
                 thickness = 1.dp,
@@ -82,15 +91,16 @@ internal fun ProfileHeader(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter =
-            painterResource(id = R.drawable.ic_launcher_background),
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(item.avatar)
+                .crossfade(true)
+                .build(),
             contentDescription = String(),
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .clip(CircleShape)
-                .shadow(8.dp, CircleShape)
-                .size(56.dp)
+                .size(72.dp)
                 .align(Alignment.CenterHorizontally)
         )
         Text(
@@ -99,12 +109,14 @@ internal fun ProfileHeader(
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
-        Text(
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(),
-            text = item.bio,
-            style = descriptionStyle
-        )
+        if (item.bio.isNotEmpty()) {
+            Text(
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+                text = item.bio,
+                style = descriptionStyle
+            )
+        }
     }
 }
 
@@ -113,6 +125,8 @@ internal fun ProfileInformations(
     item: User,
     modifier: Modifier = Modifier
 ) {
+    val uriHandler = LocalUriHandler.current
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -128,13 +142,15 @@ internal fun ProfileInformations(
         ProfileInformationRow("Twitter", item.twitter_username)
 
         Button(
-            onClick = { },
+            onClick = {
+                uriHandler.openUri(item.url)
+            },
             modifier = Modifier
                 .wrapContentWidth()
-                .padding(top = 8.dp)
+                .padding(top = 16.dp)
         ) {
             Text(
-                text = "Ver perfil na web",
+                text = stringResource(R.string.show_webpage),
                 modifier = Modifier.padding(4.dp)
             )
         }
@@ -143,22 +159,25 @@ internal fun ProfileInformations(
 
 @Composable
 internal fun ProfileInformationRow(
-    key:String,
+    key: String,
     value: String
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(id = android.R.drawable.star_big_on),
-            contentDescription = String()
-        )
-        Text(text = "$key:", style = title)
-        Text(
-            text = value,
-            style = MaterialTheme.typography.body2,
-            modifier = Modifier.padding(start = 4.dp)
-        )
+    if (value.isNotEmpty()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(id = android.R.drawable.star_big_on),
+                contentDescription = String(),
+                modifier = Modifier.size(16.dp)
+            )
+            Text(text = "$key:", style = title)
+            Text(
+                text = value,
+                style = MaterialTheme.typography.body2,
+                modifier = Modifier.padding(start = 4.dp)
+            )
+        }
     }
 }
 
@@ -166,5 +185,5 @@ internal fun ProfileInformationRow(
 @Preview(showBackground = true)
 @Composable
 internal fun ProfilePreview() {
-    ProfileView()
+    ProfileView(username = String())
 }

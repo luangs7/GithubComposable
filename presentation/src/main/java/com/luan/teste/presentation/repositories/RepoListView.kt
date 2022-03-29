@@ -1,5 +1,6 @@
 package com.luan.teste.presentation.repositories
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
@@ -7,11 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.luan.teste.common.base.ViewState
-import com.luan.teste.designsystem.ui.components.LoadingView
-import com.luan.teste.designsystem.ui.components.StatusView
+import com.luan.teste.designsystem.ui.components.loading.LoadingView
+import com.luan.teste.designsystem.ui.components.statusview.StatusView
 import com.luan.teste.designsystem.ui.theme.AppTheme
 import com.luan.teste.domain.model.repositories.Repository
 import com.luan.teste.presentation.R
@@ -29,12 +31,19 @@ internal fun RepoListContent(
     viewModel: RepoListViewModel = getViewModel()
 ){
     val responseState = viewModel.repoResponse.collectAsState()
-
-    when(val response = responseState.value){
-        is ViewState.Empty -> StatusView(icon = R.drawable.box, text = "Não houve resultados para sua busca.")
-        is ViewState.Error -> StatusView(icon = R.drawable.bankrupt, text = "Ocorreu um erro ao processar sua solicitação. Tente novamente mais tarde.")
-        is ViewState.Loading -> LoadingView()
-        is ViewState.Success -> RepoList(response.result)
+    Crossfade(targetState = responseState) { state ->
+        when (val response = state.value) {
+            is ViewState.Empty -> StatusView(
+                icon = R.drawable.box,
+                text = stringResource(R.string.empty_label)
+            )
+            is ViewState.Error -> StatusView(
+                icon = R.drawable.bankrupt,
+                text = stringResource(R.string.error_label)
+            )
+            is ViewState.Loading -> LoadingView()
+            is ViewState.Success -> RepoList(response.result)
+        }
     }
 }
 

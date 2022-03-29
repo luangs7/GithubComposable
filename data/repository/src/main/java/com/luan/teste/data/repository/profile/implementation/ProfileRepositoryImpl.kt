@@ -12,6 +12,7 @@ class ProfileRepositoryImpl(
     private val profileDataSource: ProfileDataSource
 ): ProfileRepository {
     override suspend fun getUsers(): Flow<ApiResult<List<User>>> = flow {
+        emit(ApiResult.Loading)
         profileDataSource.getUsers()
             .catch { emit(ApiResult.Error<List<User>>(it)) }
             .collect { list ->
@@ -21,6 +22,7 @@ class ProfileRepositoryImpl(
     }.flowOn(Dispatchers.IO)
 
     override suspend fun getUserByUsername(username: String): Flow<ApiResult<User>> = flow {
+        emit(ApiResult.Loading)
         profileDataSource.getUsersByUsername(username)
             .catch { emit(ApiResult.Error<User>(it)) }
             .collect {

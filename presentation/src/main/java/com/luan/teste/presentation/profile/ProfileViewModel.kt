@@ -22,10 +22,6 @@ class ProfileViewModel(
     val userListResponse: StateFlow<ViewState<List<User>>>
         get() = _userListResponse
 
-    private val _userResponse = MutableStateFlow<ViewState<User>>(ViewState.Empty)
-    val userResponse: StateFlow<ViewState<User>>
-        get() = _userResponse
-
     init {
         getUsers()
     }
@@ -48,13 +44,13 @@ class ProfileViewModel(
     fun getUsersByUsername(username:String){
         viewModelScope.launch {
             getUserByNameUseCase.execute(username)
-                .catch {  _userResponse.value = ViewState.Error(it) }
+                .catch {  _userListResponse.value = ViewState.Error(it) }
                 .collect {
-                    _userResponse.value = when(it){
+                    _userListResponse.value = when(it){
                         ApiResult.Empty ->  ViewState.Empty
                         is ApiResult.Error -> ViewState.Error(it.error)
                         ApiResult.Loading -> ViewState.Loading
-                        is ApiResult.Success -> ViewState.Success(it.data)
+                        is ApiResult.Success -> ViewState.Success(listOf(it.data))
                     }
                 }
         }

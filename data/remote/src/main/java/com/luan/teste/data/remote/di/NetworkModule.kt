@@ -3,6 +3,7 @@ package com.luan.teste.data.remote.di
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.luan.teste.data.remote.BuildConfig
+import com.luan.teste.data.remote.authorization.AuthorizationInterceptor
 import com.luan.teste.data.remote.emoji.model.EmojiResponse
 import com.luan.teste.data.remote.emoji.service.EmojiConverterFactory
 import okhttp3.OkHttpClient
@@ -24,6 +25,7 @@ object NetworkModule {
     private fun provideOkHttpClient(): OkHttpClient {
         val builder = OkHttpClient.Builder()
             .followRedirects(true)
+            .addInterceptor(AuthorizationInterceptor())
             .addNetworkInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })

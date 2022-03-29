@@ -7,7 +7,7 @@ import retrofit2.http.Path
 
 interface ProfileService {
 
-    @GET("user")
+    @GET("users")
     suspend fun getUsers(): Response<List<UserResponse>>
 
     @GET("users/{username}")

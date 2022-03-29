@@ -11,46 +11,49 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.CachePolicy
+import coil.request.ImageRequest
 import com.luan.teste.designsystem.ui.theme.Shapes
+import com.luan.teste.domain.model.profile.User
 
 @Composable
 fun UserItemView(
+    user: User,
     modifier: Modifier = Modifier
 ) {
     Card(
         elevation = 3.dp,
         shape = Shapes.medium,
-        modifier =  modifier.fillMaxWidth().wrapContentHeight().padding(top = 4.dp, bottom = 4.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(top = 4.dp, bottom = 4.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .padding(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter =
-                painterResource(id = com.luan.teste.presentation.R.drawable.ic_launcher_background),
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(user.avatar)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = "",
                 modifier = Modifier
                     .clip(CircleShape)
-                    .shadow(3.dp, CircleShape)
-                    .size(42.dp)
+                    .size(56.dp)
                     .align(Alignment.CenterVertically)
             )
-            Text(text = "@username", style = MaterialTheme.typography.body2)
+            Text(text = "@${user.login}", style = MaterialTheme.typography.body2)
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun UserItemViewPreview() {
-    UserItemView()
 }

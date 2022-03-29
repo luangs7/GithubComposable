@@ -14,6 +14,7 @@ class RepositoriesRepositoryImpl(
     private val repositoriesDataSource: RepositoriesDataSource
 ): RepositoriesRepository {
     override suspend fun getRepositories(): Flow<ApiResult<List<Repository>>> = flow {
+        emit(ApiResult.Loading)
         repositoriesDataSource.getRepositories()
             .catch { emit(ApiResult.Error<List<Repository>>(it)) }
             .collect { list ->

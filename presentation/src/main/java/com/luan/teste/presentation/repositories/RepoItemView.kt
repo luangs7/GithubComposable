@@ -78,7 +78,6 @@ internal fun AvatarWithUsername(
             contentDescription = "",
             modifier = Modifier
                 .clip(CircleShape)
-                .shadow(3.dp, CircleShape)
                 .size(42.dp)
                 .align(Alignment.CenterHorizontally)
         )

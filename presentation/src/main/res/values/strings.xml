@@ -1,2 +1,6 @@
 <resources>
+    <string name="empty_label">Não houve resultados para sua busca.</string>
+    <string name="search_label">Pesquise um usuário</string>
+    <string name="error_label">Ocorreu um erro ao processar sua solicitação. Tente novamente mais tarde.</string>
+    <string name="show_webpage">Ver perfil na web</string>
 </resources>

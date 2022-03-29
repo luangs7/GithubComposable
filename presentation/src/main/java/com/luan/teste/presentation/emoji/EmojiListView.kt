@@ -7,11 +7,12 @@ import androidx.compose.foundation.lazy.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.luan.teste.common.base.ViewState
-import com.luan.teste.designsystem.ui.components.LoadingView
-import com.luan.teste.designsystem.ui.components.StatusView
+import com.luan.teste.designsystem.ui.components.loading.LoadingView
+import com.luan.teste.designsystem.ui.components.statusview.StatusView
 import com.luan.teste.designsystem.ui.theme.AppTheme
 import com.luan.teste.domain.model.emoji.Emoji
 import com.luan.teste.presentation.R
@@ -41,8 +42,8 @@ internal fun EmojiList(
 
     Crossfade(listState) { state ->
         when(val value = state.value){
-            is ViewState.Empty -> StatusView(icon = R.drawable.box, text = "Não houve resultados para sua busca.")
-            is ViewState.Error -> StatusView(icon = R.drawable.bankrupt, text = "Ocorreu um erro ao processar sua solicitação. Tente novamente mais tarde.")
+            is ViewState.Empty -> StatusView(icon = R.drawable.box, text = stringResource(R.string.empty_label))
+            is ViewState.Error -> StatusView(icon = R.drawable.bankrupt, text = stringResource(R.string.error_label))
             is ViewState.Loading -> LoadingView()
             is ViewState.Success -> EmojiListContent(list = value.result)
         }

@@ -1,4 +1,4 @@
-package com.luan.teste.designsystem.ui.components
+package com.luan.teste.designsystem.ui.components.loading
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,17 +15,20 @@ import androidx.compose.ui.unit.dp
 
 @Preview(showBackground = true)
 @Composable
-fun LoadingView() {
+fun LoadingView(
+    backgroudColor: Color = Color.Black.copy(0.3f),
+    progressColor: Color = Color.White
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(0.5f)),
+            .background(backgroudColor),
     ) {
         Column(
             modifier = Modifier.align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CircularProgressIndicator(color = Color.White, strokeWidth = 1.dp)
+            CircularProgressIndicator(color = Color.White, strokeWidth = 2.dp)
         }
     }
 }

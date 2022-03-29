@@ -7,15 +7,15 @@ data class UserResponse(
     @SerializedName("avatar_url")
     val avatarUrl: String,
     @SerializedName("bio")
-    val bio: String,
+    val bio: String?,
     @SerializedName("blog")
-    val blog: String,
+    val blog: String?,
     @SerializedName("company")
-    val company: String,
+    val company: String?,
     @SerializedName("created_at")
     val createdAt: String,
     @SerializedName("email")
-    val email: String,
+    val email: String?,
     @SerializedName("events_url")
     val eventsUrl: String,
     @SerializedName("followers")
@@ -37,11 +37,11 @@ data class UserResponse(
     @SerializedName("id")
     val id: Int,
     @SerializedName("location")
-    val location: String,
+    val location: String?,
     @SerializedName("login")
-    val login: String,
+    val login: String?,
     @SerializedName("name")
-    val name: String,
+    val name: String?,
     @SerializedName("node_id")
     val nodeId: String,
     @SerializedName("organizations_url")
@@ -61,11 +61,11 @@ data class UserResponse(
     @SerializedName("subscriptions_url")
     val subscriptionsUrl: String,
     @SerializedName("twitter_username")
-    val twitterUsername: String,
+    val twitterUsername: String?,
     @SerializedName("type")
-    val type: String,
+    val type: String?,
     @SerializedName("updated_at")
     val updatedAt: String,
     @SerializedName("url")
-    val url: String
+    val url: String?
 )

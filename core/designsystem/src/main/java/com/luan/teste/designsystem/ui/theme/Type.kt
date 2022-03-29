@@ -31,7 +31,12 @@ val typography = Typography(
         fontSize = 14.sp,
         color = Color.Black
     ),
-
+    h5 = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp,
+        color = Color.Black.copy(alpha = 0.3f)
+    ),
     h6 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.SemiBold,
