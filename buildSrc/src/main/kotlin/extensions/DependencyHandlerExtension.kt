@@ -15,13 +15,12 @@ fun DependencyHandler.addCommonDependencies() {
     implementation(Dependencies.lifecycle)
     implementation(Dependencies.kotlin)
     testImplementation(Tests.jUnit)
-    annotationProcessor(AnnotationProcessor.lifecycle)
+    kapt(AnnotationProcessor.lifecycle)
 }
 
 fun DependencyHandler.addKoinDependencies(){
     implementation(Dependencies.koinAndroid)
-    implementation(Dependencies.koinAndroidViewModel)
-    implementation(Dependencies.koinAndroidScope)
+    implementation(Dependencies.koinCompose)
 }
 
 fun DependencyHandler.addDesignDependencies() {
@@ -38,12 +37,19 @@ fun DependencyHandler.addComposeDependencies(){
     implementation(Dependencies.composePreview)
     implementation(Dependencies.composeActivity)
     implementation(Dependencies.navigationCompose)
+    implementation(Dependencies.coilKt)
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.1.1")
 }
 
 fun DependencyHandler.addCoroutinesDependencies(){
     implementation(Dependencies.coroutinesCore)
     implementation(Dependencies.coroutinesAndroid)
+}
+
+fun DependencyHandler.addRoomDependencies(){
+    implementation(Dependencies.room)
+    implementation(Dependencies.roomCoroutines)
+    kapt(AnnotationProcessor.room)
 }
 
 private fun DependencyHandler.api(dependencyNotation: String): Dependency? =
@@ -61,8 +67,8 @@ private fun DependencyHandler.androidTestApi(dependencyNotation: Any): Dependenc
 private fun DependencyHandler.testImplementation(dependencyNotation: Any): Dependency? =
     add("testImplementation", dependencyNotation)
 
-private fun DependencyHandler.annotationProcessor(dependencyNotation: Any): Dependency? =
-    add("annotationProcessor", dependencyNotation)
+private fun DependencyHandler.kapt(dependencyNotation: Any): Dependency? =
+    add("kapt", dependencyNotation)
 
 private fun DependencyHandler.androidTestImplementation(
     dependencyNotation: String,

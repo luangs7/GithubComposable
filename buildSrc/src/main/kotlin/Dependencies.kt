@@ -5,9 +5,10 @@ object Versions {
     const val material = "1.3.0"
     const val constraintLayout = "1.1.3"
     const val circleimageview = "3.0.0"
-    const val koin = "2.0.1"
+    const val koin = "3.2.0-beta-1"
     const val retrofit = "2.7.1"
     const val retrofitConverter = "2.9.0"
+    const val retrofitLogging = "4.9.0"
     const val lifecycle = "2.2.0"
     const val room = "2.4.0"
     const val jUnit = "4.12"
@@ -24,6 +25,7 @@ object Versions {
     const val lifecycleKtx = "2.4.1"
     const val lifecycleCompiler = "2.3.0"
     const val navigationCompose = "2.4.1"
+    const val coilKt = "2.0.0-rc02"
 }
 
 object Dependencies {
@@ -37,9 +39,8 @@ object Dependencies {
     val coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
     val coroutinesAndroid =
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
-    val koinAndroid = "org.koin:koin-android:${Versions.koin}"
-    val koinAndroidScope = "org.koin:koin-androidx-scope:${Versions.koin}"
-    val koinAndroidViewModel = "org.koin:koin-androidx-viewmodel:${Versions.koin}"
+    val koinAndroid = "io.insert-koin:koin-android:${Versions.koin}"
+    val koinCompose = "io.insert-koin:koin-androidx-compose:${Versions.koin}"
     val circleimageview = "de.hdodenhof:circleimageview:${Versions.circleimageview}"
     val room = "androidx.room:room-runtime:${Versions.room}"
     val roomCoroutines = "androidx.room:room-ktx:${Versions.room}"
@@ -50,7 +51,8 @@ object Dependencies {
     val composeActivity = "androidx.activity:activity-compose:${Versions.composeActivity}"
     val navigationCompose = "androidx.navigation:navigation-compose:${Versions.navigationCompose}"
     val retrofitConverter  = "com.squareup.retrofit2:converter-gson:${Versions.retrofitConverter}"
-
+    val retrofitLogger  = "com.squareup.okhttp3:logging-interceptor:${Versions.retrofitLogging}"
+    val coilKt  = "io.coil-kt:coil-compose:${Versions.coilKt}"
 }
 
 

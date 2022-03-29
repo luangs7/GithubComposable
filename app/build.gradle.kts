@@ -4,6 +4,7 @@ plugins {
     id(GradlePlugin.ANDROID_APPLICATION)
     id(GradlePlugin.KOTLIN_ANDROID)
     id(GradlePlugin.COMPOSE)
+    kotlin("kapt")
 }
 
 repositories {
@@ -22,10 +23,13 @@ android {
 }
 
 dependencies {
-    implementation(projects.common)
+    implementation(projects.core.common)
     implementation(projects.domain)
     implementation(projects.presentation)
-    implementation(projects.designsystem)
+    implementation(projects.core.designsystem)
+    implementation(projects.data.local)
+    implementation(projects.data.remote)
+    implementation(projects.data.repository)
     addKoinDependencies()
     addCoroutinesDependencies()
     addCommonDependencies()

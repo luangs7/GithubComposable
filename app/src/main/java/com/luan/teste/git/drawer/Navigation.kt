@@ -6,9 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.luan.teste.presentation.emoji.EmojiListView
-import com.luan.teste.presentation.profile.ProfileView
 import com.luan.teste.presentation.profile.search.ProfileSearchView
-import com.luan.teste.presentation.repositories.ui.RepoListView
+import com.luan.teste.presentation.repositories.RepoListView
 
 @ExperimentalFoundationApi
 @Composable

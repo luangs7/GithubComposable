@@ -3,7 +3,7 @@ plugins {
     id(GradlePlugin.COMPOSE_LIBRARY)
 }
 dependencies {
-    implementation(projects.common)
+    implementation(projects.core.common)
     implementation(projects.domain)
-    implementation(projects.designsystem)
+    implementation(projects.core.designsystem)
 }

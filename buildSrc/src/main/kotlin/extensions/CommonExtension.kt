@@ -37,17 +37,27 @@ fun CommonExtension<*, *, *, *>.addComposeConfig() {
 }
 
 fun CommonExtension<*, *, *, *>.configureBuildTypes() {
+    flavorDimensions.add("api")
     buildTypes {
         getByName("release") {
-            buildConfigField("Boolean","IS_MOCK","false")
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
+
+    productFlavors {
+        create("prod") {
+            buildConfigField("Boolean","IS_MOCK","false")
+            dimension = "api"
         }
 
         create("mock"){
             buildConfigField("Boolean","IS_MOCK","true")
-            isMinifyEnabled = ConfigData.minifyEnable
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            dimension = "api"
+        }
+        forEach {
+            it.buildConfigField("String","API_URL","\"https://api.github.com/\"")
         }
     }
 }
+

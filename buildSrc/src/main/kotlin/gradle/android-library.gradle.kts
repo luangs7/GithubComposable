@@ -9,10 +9,11 @@ import extensions.configureBuildTypes
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    kotlin("kapt")
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 android {

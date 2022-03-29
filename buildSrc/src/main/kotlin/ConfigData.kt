@@ -12,9 +12,9 @@ object ConfigData {
 
 object Modules{
     const val app = ":app"
-    const val common = ":common"
+    const val common = ":core:common"
     const val data = ":data"
     const val domain = ":domain"
-    const val designsystem = ":designsystem"
+    const val designsystem = ":core:designsystem"
     const val presentation = ":presentation"
 }
