@@ -26,6 +26,7 @@ object Versions {
     const val lifecycleCompiler = "2.3.0"
     const val navigationCompose = "2.4.1"
     const val coilKt = "2.0.0-rc02"
+    const val paging = "1.0.0-alpha14"
 }
 
 object Dependencies {
@@ -53,6 +54,7 @@ object Dependencies {
     val retrofitConverter  = "com.squareup.retrofit2:converter-gson:${Versions.retrofitConverter}"
     val retrofitLogger  = "com.squareup.okhttp3:logging-interceptor:${Versions.retrofitLogging}"
     val coilKt  = "io.coil-kt:coil-compose:${Versions.coilKt}"
+    val pagingCompose  = "androidx.paging:paging-compose:${Versions.paging}"
 }
 
 

@@ -8,11 +8,13 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.luan.teste.designsystem.ui.theme.AppTheme
 import com.luan.teste.designsystem.ui.theme.TopBar
+import com.luan.teste.git.R
 import com.luan.teste.git.drawer.DrawerView
 import com.luan.teste.git.drawer.NavDrawerItem
 import com.luan.teste.git.drawer.Navigation
@@ -45,6 +47,7 @@ fun MainView(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { TopBar(
+            toolbarTitle = stringResource(id = R.string.app_name),
             scope = scope,
             scaffoldState = scaffoldState,
             isMenu = isMenu,
@@ -67,8 +70,6 @@ fun MainView(
 @Composable
 fun DefaultPreview() {
     AppTheme {
-        MainView{
-
-        }
+        MainView{}
     }
 }

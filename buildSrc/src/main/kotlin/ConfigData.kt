@@ -17,4 +17,5 @@ object Modules{
     const val domain = ":domain"
     const val designsystem = ":core:designsystem"
     const val presentation = ":presentation"
+    const val navigation = ":library:navigation"
 }

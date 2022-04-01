@@ -20,8 +20,7 @@ import org.koin.androidx.compose.getViewModel
 
 @ExperimentalFoundationApi
 @Composable
-fun EmojiListView() {
-    val viewModel: EmojiListViewModel = getViewModel()
+fun EmojiListView(viewModel: EmojiListViewModel) {
     AppTheme {
         Box(
             modifier = Modifier
@@ -75,5 +74,5 @@ internal fun EmojiListContent(
 @Preview(showBackground = true)
 @Composable
 fun EmojiListPreview() {
-    EmojiListView()
+    EmojiListView(getViewModel())
 }

@@ -13,6 +13,8 @@ class EmojiConverterFactory : JsonDeserializer<List<EmojiResponse>> {
         context: JsonDeserializationContext?
     ): List<EmojiResponse> {
         return json?.asJsonObject!!.entrySet().map {
+            it.key
+            it.value
             EmojiResponse(source = it.value.asString)
         }
     }

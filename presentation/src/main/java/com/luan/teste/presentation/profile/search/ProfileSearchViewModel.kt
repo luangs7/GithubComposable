@@ -1,7 +1,8 @@
-package com.luan.teste.presentation.profile
+package com.luan.teste.presentation.profile.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.luan.teste.common.base.ApiResult
 import com.luan.teste.common.base.ViewState
 import com.luan.teste.domain.interactor.GetUserByNameUseCase
@@ -13,22 +14,21 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class ProfileViewModel(
-    private val getUserUseCase: GetUserUseCase,
-    private val getUserByNameUseCase: GetUserByNameUseCase
-): ViewModel() {
+class ProfileSearchViewModel(
+    private val getUserUseCase: GetUserUseCase
+    ): ViewModel() {
 
-    private val _userListResponse = MutableStateFlow<ViewState<List<User>>>(ViewState.Empty)
-    val userListResponse: StateFlow<ViewState<List<User>>>
+    private val _userListResponse = MutableStateFlow<ViewState<PagingData<User>>>(ViewState.Empty)
+    val userListResponse: StateFlow<ViewState<PagingData<User>>>
         get() = _userListResponse
 
     init {
         getUsers()
     }
 
-    fun getUsers(){
+    fun getUsers(query: String? = null){
         viewModelScope.launch {
-            getUserUseCase.execute(Unit)
+            getUserUseCase.execute(query)
                 .catch {  _userListResponse.value = ViewState.Error(it) }
                 .collect {
                     _userListResponse.value = when(it){
@@ -40,20 +40,4 @@ class ProfileViewModel(
                 }
         }
     }
-
-    fun getUsersByUsername(username:String){
-        viewModelScope.launch {
-            getUserByNameUseCase.execute(username)
-                .catch {  _userListResponse.value = ViewState.Error(it) }
-                .collect {
-                    _userListResponse.value = when(it){
-                        ApiResult.Empty ->  ViewState.Empty
-                        is ApiResult.Error -> ViewState.Error(it.error)
-                        ApiResult.Loading -> ViewState.Loading
-                        is ApiResult.Success -> ViewState.Success(listOf(it.data))
-                    }
-                }
-        }
-    }
-
 }

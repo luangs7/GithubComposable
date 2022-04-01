@@ -14,6 +14,7 @@ import org.gradle.kotlin.dsl.exclude
 fun DependencyHandler.addCommonDependencies() {
     implementation(Dependencies.lifecycle)
     implementation(Dependencies.kotlin)
+    implementation(Dependencies.pagingCompose)
     testImplementation(Tests.jUnit)
     kapt(AnnotationProcessor.lifecycle)
 }

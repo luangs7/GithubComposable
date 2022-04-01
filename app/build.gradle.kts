@@ -30,6 +30,7 @@ dependencies {
     implementation(projects.data.local)
     implementation(projects.data.remote)
     implementation(projects.data.repository)
+    implementation(projects.library.navigation)
     addKoinDependencies()
     addCoroutinesDependencies()
     addCommonDependencies()

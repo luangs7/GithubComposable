@@ -1,6 +1,6 @@
 package com.luan.teste.presentation.profile.search
 
-import android.widget.SearchView
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,35 +11,40 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.PagingData
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
+import com.luan.estar.navigation.DestinationDeepLink
 import com.luan.teste.common.base.ViewState
+import com.luan.teste.common.extensions.flow
 import com.luan.teste.designsystem.ui.components.loading.LoadingView
 import com.luan.teste.designsystem.ui.components.searchview.SearchView
 import com.luan.teste.designsystem.ui.components.statusview.StatusView
 import com.luan.teste.designsystem.ui.theme.AppTheme
 import com.luan.teste.domain.model.profile.User
 import com.luan.teste.presentation.R
-import com.luan.teste.presentation.profile.ProfileViewModel
 import com.luan.teste.presentation.profile.details.ProfileNavItem
+import kotlinx.coroutines.flow.Flow
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun ProfileSearchView(
-    navigateController: NavHostController
+    navigateController: NavHostController,
+    searchViewModel: ProfileSearchViewModel
 ) {
     AppTheme {
-        ProfileSearchContent(navigateController)
+        ProfileSearchContent(navigateController, searchViewModel)
     }
 }
 
 @Composable
 internal fun ProfileSearchContent(
-    navigateController: NavHostController
+    navigateController: NavHostController,
+    searchViewModel: ProfileSearchViewModel
 ) {
     val searchState = remember { mutableStateOf(TextFieldValue()) }
-    val viewModel: ProfileViewModel = getViewModel()
 
     Column(
         modifier = Modifier
@@ -50,48 +55,54 @@ internal fun ProfileSearchContent(
             label = stringResource(id = R.string.search_label),
             searchValue = searchState
         ) { query ->
-            if (query.isEmpty()) viewModel.getUsers()
-            else viewModel.getUsersByUsername(query)
+            searchViewModel.getUsers(query)
         }
-        UserListContent(viewModel, navigateController)
+        UserListContent(searchViewModel, navigateController)
     }
 }
 
 @Composable
 internal fun UserListContent(
-    viewModel: ProfileViewModel,
+    searchViewModel: ProfileSearchViewModel,
     navigateController: NavHostController
 ) {
-    val userListState = viewModel.userListResponse.collectAsState()
+    val userListState = searchViewModel.userListResponse.collectAsState()
 
-    when (val state = userListState.value) {
-        is ViewState.Empty, is ViewState.Error -> StatusView(
-            icon = R.drawable.box,
-            text = stringResource(R.string.empty_label)
-        )
-        ViewState.Loading -> LoadingView(
-            backgroudColor = Color.White,
-            progressColor = Color.DarkGray
-        )
-        is ViewState.Success -> UserListView(state.result) {
-            navigateController.navigate("${ProfileNavItem.ProfileDetails.route}/${it.login}")
+    Crossfade(targetState = userListState) { state ->
+        when (val response = state.value) {
+            is ViewState.Empty, is ViewState.Error -> StatusView(
+                icon = R.drawable.box,
+                text = stringResource(R.string.empty_label)
+            )
+            ViewState.Loading -> LoadingView(
+                backgroudColor = Color.White,
+                progressColor = Color.DarkGray
+            )
+            is ViewState.Success -> UserListView(response.result.flow()) {
+                navigateController.navigate(DestinationDeepLink.passUsername(it.login))
+            }
         }
     }
+
 }
 
 @Composable
 internal fun UserListView(
-    list: List<User>,
+    list: Flow<PagingData<User>>,
     onItemClick: (User) -> Unit
 ) {
+    val listState = list.collectAsLazyPagingItems()
+
     LazyColumn {
-        items(list.count()) {
-            UserItemView(
-                user = list[it],
-                modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp)
-                    .clickable { onItemClick.invoke(list[it]) }
-            )
+        items(listState) { item ->
+            item?.let {
+                UserItemView(
+                    user = it,
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp)
+                        .clickable { onItemClick.invoke(it) }
+                )
+            }
         }
     }
 }
@@ -99,5 +110,5 @@ internal fun UserListView(
 @Preview(showBackground = false)
 @Composable
 internal fun ProfileSearchViewPreview() {
-    ProfileSearchView(rememberNavController())
+    ProfileSearchView(rememberNavController(), getViewModel())
 }

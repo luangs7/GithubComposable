@@ -7,7 +7,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 class RepositoriesServiceMock:RepositoriesService {
-    override suspend fun getRepositories(): Response<RepositorySearchResponse> {
+    override suspend fun getRepositories(page: Int): Response<RepositorySearchResponse> {
         delay(3000)
         return Response.success(null)
     }

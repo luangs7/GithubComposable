@@ -1,7 +1,6 @@
 package com.luan.teste.presentation.profile.details
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -10,7 +9,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -21,7 +19,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.luan.teste.common.base.ViewState
 import com.luan.teste.designsystem.ui.components.loading.LoadingView
@@ -31,16 +28,16 @@ import com.luan.teste.designsystem.ui.theme.descriptionStyle
 import com.luan.teste.designsystem.ui.theme.title
 import com.luan.teste.domain.model.profile.User
 import com.luan.teste.presentation.R
-import com.luan.teste.presentation.profile.ProfileViewModel
+import com.luan.teste.presentation.profile.search.ProfileSearchViewModel
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun ProfileView(
-    viewModel: ProfileViewModel = getViewModel(),
+    searchViewModel: ProfileViewModel,
     username: String
 ) {
-    val userState = viewModel.userListResponse.collectAsState()
-    viewModel.getUsersByUsername(username)
+    val userState = searchViewModel.userResponse.collectAsState()
+    searchViewModel.getUsersByUsername(username)
 
     Crossfade(userState) { state ->
         when (val value = state.value) {
@@ -48,8 +45,7 @@ fun ProfileView(
                 icon = R.drawable.bankrupt,
                 text = stringResource(R.string.error_label)
             )
-            is ViewState.Loading -> LoadingView()
-            is ViewState.Success -> ProfileContentView(value.result.first())
+            is ViewState.Success -> ProfileContentView(value.result)
         }
     }
 }
@@ -101,7 +97,8 @@ internal fun ProfileHeader(
             modifier = Modifier
                 .clip(CircleShape)
                 .size(72.dp)
-                .align(Alignment.CenterHorizontally)
+                .align(Alignment.CenterHorizontally),
+            placeholder = painterResource(id = R.drawable.ic_launcher_background)
         )
         Text(
             text = item.name,
@@ -185,5 +182,5 @@ internal fun ProfileInformationRow(
 @Preview(showBackground = true)
 @Composable
 internal fun ProfilePreview() {
-    ProfileView(username = String())
+    ProfileView(getViewModel(), username = String())
 }
