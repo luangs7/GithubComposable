@@ -18,13 +18,9 @@ class ProfileSearchViewModel(
     private val getUserUseCase: GetUserUseCase
     ): ViewModel() {
 
-    private val _userListResponse = MutableStateFlow<ViewState<PagingData<User>>>(ViewState.Empty)
+    private val _userListResponse = MutableStateFlow<ViewState<PagingData<User>>>(ViewState.Loading)
     val userListResponse: StateFlow<ViewState<PagingData<User>>>
         get() = _userListResponse
-
-    init {
-        getUsers()
-    }
 
     fun getUsers(query: String? = null){
         viewModelScope.launch {

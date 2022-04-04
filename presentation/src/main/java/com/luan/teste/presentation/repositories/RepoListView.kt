@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +31,11 @@ import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun RepoListView(viewModel: RepoListViewModel) {
+
+    LaunchedEffect(key1 = Unit){
+        viewModel.getRepositories()
+    }
+
     AppTheme {
         RepoListContent(viewModel)
     }

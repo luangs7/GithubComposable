@@ -27,6 +27,7 @@ object Versions {
     const val navigationCompose = "2.4.1"
     const val coilKt = "2.0.0-rc02"
     const val paging = "1.0.0-alpha14"
+    const val animateNavcontroller = "0.24.5-alpha"
 }
 
 object Dependencies {
@@ -55,6 +56,7 @@ object Dependencies {
     val retrofitLogger  = "com.squareup.okhttp3:logging-interceptor:${Versions.retrofitLogging}"
     val coilKt  = "io.coil-kt:coil-compose:${Versions.coilKt}"
     val pagingCompose  = "androidx.paging:paging-compose:${Versions.paging}"
+    val animationNavController  = "com.google.accompanist:accompanist-navigation-animation:${Versions.animateNavcontroller}"
 }
 
 

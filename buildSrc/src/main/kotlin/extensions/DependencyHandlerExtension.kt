@@ -15,6 +15,7 @@ fun DependencyHandler.addCommonDependencies() {
     implementation(Dependencies.lifecycle)
     implementation(Dependencies.kotlin)
     implementation(Dependencies.pagingCompose)
+    implementation(Dependencies.animationNavController)
     testImplementation(Tests.jUnit)
     kapt(AnnotationProcessor.lifecycle)
 }

@@ -26,7 +26,7 @@ class ProfilePageSource(
             LoadResult.Page(
                 data = response ?: listOf(),
                 prevKey = null,
-                nextKey = pageNumber.plus(1)
+                nextKey = if (response.isNullOrEmpty()) null else pageNumber.plus(1)
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

@@ -2,6 +2,7 @@ package com.luan.teste.git.drawer
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
@@ -15,11 +16,12 @@ import com.luan.teste.presentation.profile.details.ProfileNavItem
 import com.luan.teste.presentation.profile.details.ProfileView
 import com.luan.teste.presentation.profile.search.ProfileSearchView
 import com.luan.teste.presentation.repositories.RepoListView
+import com.luan.teste.presentation.repositories.RepoListViewModel
 import org.koin.androidx.compose.getViewModel
 
 @ExperimentalFoundationApi
 @Composable
-fun Navigation(navController: NavHostController) {
+fun NavGraph(navController: NavHostController) {
     NavHost(navController, startDestination = NavDrawerItem.Repositories.route) {
         composable(NavDrawerItem.Repositories.route) {
             RepoListView(getViewModel())

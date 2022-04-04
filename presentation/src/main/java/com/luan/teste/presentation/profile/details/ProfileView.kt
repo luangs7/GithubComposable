@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +38,10 @@ fun ProfileView(
     username: String
 ) {
     val userState = searchViewModel.userResponse.collectAsState()
-    searchViewModel.getUsersByUsername(username)
+
+    LaunchedEffect(key1 = Unit){
+        searchViewModel.getUsersByUsername(username)
+    }
 
     Crossfade(userState) { state ->
         when (val value = state.value) {
@@ -46,6 +50,7 @@ fun ProfileView(
                 text = stringResource(R.string.error_label)
             )
             is ViewState.Success -> ProfileContentView(value.result)
+            is ViewState.Loading -> LoadingView()
         }
     }
 }

@@ -18,7 +18,7 @@ class RepositoriesPageSource(
             LoadResult.Page(
                 data = data ?: listOf(),
                 prevKey = null,
-                nextKey = pageNumber.plus(1)
+                nextKey = if (data.isNullOrEmpty()) null else pageNumber.plus(1)
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

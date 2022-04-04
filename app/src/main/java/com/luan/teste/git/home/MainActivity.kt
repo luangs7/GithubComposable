@@ -16,8 +16,7 @@ import com.luan.teste.designsystem.ui.theme.AppTheme
 import com.luan.teste.designsystem.ui.theme.TopBar
 import com.luan.teste.git.R
 import com.luan.teste.git.drawer.DrawerView
-import com.luan.teste.git.drawer.NavDrawerItem
-import com.luan.teste.git.drawer.Navigation
+import com.luan.teste.git.drawer.NavGraph
 import com.luan.teste.presentation.profile.details.ProfileNavItem
 
 @ExperimentalFoundationApi
@@ -60,9 +59,8 @@ fun MainView(
            DrawerView(scope = scope, scaffoldState = scaffoldState, navController = navController)
         },
     ) {
-        Navigation(navController = navController)
+        NavGraph(navController = navController)
     }
-
 }
 
 @ExperimentalFoundationApi

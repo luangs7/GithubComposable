@@ -16,7 +16,7 @@ class ProfileViewModel(
     private val getUserByNameUseCase: GetUserByNameUseCase
 ): ViewModel() {
 
-    private val _userResponse = MutableStateFlow<ViewState<User>>(ViewState.Empty)
+    private val _userResponse = MutableStateFlow<ViewState<User>>(ViewState.Loading)
     val userResponse: StateFlow<ViewState<User>>
         get() = _userResponse
 

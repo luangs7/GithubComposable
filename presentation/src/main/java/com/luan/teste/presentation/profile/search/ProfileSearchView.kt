@@ -34,6 +34,10 @@ fun ProfileSearchView(
     navigateController: NavHostController,
     searchViewModel: ProfileSearchViewModel
 ) {
+    LaunchedEffect(Unit){
+        searchViewModel.getUsers()
+    }
+
     AppTheme {
         ProfileSearchContent(navigateController, searchViewModel)
     }

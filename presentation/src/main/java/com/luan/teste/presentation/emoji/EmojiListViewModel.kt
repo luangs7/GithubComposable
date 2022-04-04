@@ -14,15 +14,11 @@ class EmojiListViewModel(
     private val useCase: GetEmojiListUseCase
 ) : ViewModel() {
 
-    private val _emojiResponse = MutableStateFlow<ViewState<List<Emoji>>>(ViewState.Empty)
+    private val _emojiResponse = MutableStateFlow<ViewState<List<Emoji>>>(ViewState.Loading)
     val emojiResponse: StateFlow<ViewState<List<Emoji>>>
         get() = _emojiResponse
 
-    init {
-        getEmojis()
-    }
-
-    private fun getEmojis() {
+    fun getEmojis() {
         viewModelScope.launch {
             useCase.execute(Unit)
                 .catch { _emojiResponse.value = ViewState.Error(it) }

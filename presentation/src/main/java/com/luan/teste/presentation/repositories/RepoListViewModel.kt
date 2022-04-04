@@ -18,15 +18,11 @@ class RepoListViewModel(
     private val repositoriesUseCase: GetRepositoriesUseCase
 ): ViewModel() {
 
-    private val _repoResponse = MutableStateFlow<ViewState<PagingData<Repository>>>(ViewState.Empty)
+    private val _repoResponse = MutableStateFlow<ViewState<PagingData<Repository>>>(ViewState.Loading)
     val repoResponse: StateFlow<ViewState<PagingData<Repository>>>
         get() = _repoResponse
-    
-    init {
-        getRepositories()
-    }
 
-    private fun getRepositories(){
+    fun getRepositories(){
         viewModelScope.launch {
             repositoriesUseCase.execute(Unit)
                 .catch { _repoResponse.value = ViewState.Error(it) }
