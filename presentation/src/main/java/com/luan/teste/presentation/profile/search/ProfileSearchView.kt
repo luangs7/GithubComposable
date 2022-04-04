@@ -13,7 +13,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.luan.estar.navigation.DestinationDeepLink
@@ -74,10 +76,7 @@ internal fun UserListContent(
 
     Crossfade(targetState = userListState) { state ->
         when (val response = state.value) {
-            is ViewState.Empty, is ViewState.Error -> StatusView(
-                icon = R.drawable.box,
-                text = stringResource(R.string.empty_label)
-            )
+            is ViewState.Empty, is ViewState.Error -> EmptyView()
             ViewState.Loading -> LoadingView(
                 backgroudColor = Color.White,
                 progressColor = Color.DarkGray
@@ -87,7 +86,14 @@ internal fun UserListContent(
             }
         }
     }
+}
 
+@Composable
+internal fun EmptyView(){
+    StatusView(
+        icon = R.drawable.box,
+        text = stringResource(R.string.empty_label)
+    )
 }
 
 @Composable
@@ -97,17 +103,21 @@ internal fun UserListView(
 ) {
     val listState = list.collectAsLazyPagingItems()
 
-    LazyColumn {
-        items(listState) { item ->
-            item?.let {
-                UserItemView(
-                    user = it,
-                    modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp)
-                        .clickable { onItemClick.invoke(it) }
-                )
+    if(listState.itemCount > 0) {
+        LazyColumn {
+            items(listState) { item ->
+                item?.let {
+                    UserItemView(
+                        user = it,
+                        modifier = Modifier
+                            .padding(start = 16.dp, end = 16.dp)
+                            .clickable { onItemClick.invoke(it) }
+                    )
+                }
             }
         }
+    } else {
+        EmptyView()
     }
 }
 

@@ -49,10 +49,7 @@ internal fun RepoListContent(
 
     Crossfade(targetState = responseState) { state ->
         when (val response = state.value) {
-            is ViewState.Empty -> StatusView(
-                icon = R.drawable.box,
-                text = stringResource(R.string.empty_label)
-            )
+            is ViewState.Empty -> EmptyView()
             is ViewState.Error -> StatusView(
                 icon = R.drawable.bankrupt,
                 text = stringResource(R.string.error_label)
@@ -64,30 +61,42 @@ internal fun RepoListContent(
 }
 
 @Composable
+internal fun EmptyView(){
+    StatusView(
+        icon = R.drawable.box,
+        text = stringResource(R.string.empty_label)
+    )
+}
+
+@Composable
 internal fun RepoList(
     list: Flow<PagingData<Repository>>
 ) {
     val listState: LazyPagingItems<Repository> = list.collectAsLazyPagingItems()
     val lazyState = rememberLazyListState()
 
-    LazyColumn(
-        state= lazyState,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.padding(top = 16.dp)
-    ) {
-        items(listState) { item ->
-            item?.let {
-                RepoItemView(
-                    item= it,
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp)
-                )
-                Divider(
-                    color = Color.Gray.copy(alpha = 0.3f),
-                    thickness = 1.dp,
-                    modifier = Modifier.padding(start = 32.dp, top = 8.dp)
-                )
+    if(listState.itemCount > 0) {
+        LazyColumn(
+            state = lazyState,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.padding(top = 16.dp)
+        ) {
+            items(listState) { item ->
+                item?.let {
+                    RepoItemView(
+                        item = it,
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+                    )
+                    Divider(
+                        color = Color.Gray.copy(alpha = 0.3f),
+                        thickness = 1.dp,
+                        modifier = Modifier.padding(start = 32.dp, top = 8.dp)
+                    )
+                }
             }
         }
+    }else {
+        EmptyView()
     }
 }
 
